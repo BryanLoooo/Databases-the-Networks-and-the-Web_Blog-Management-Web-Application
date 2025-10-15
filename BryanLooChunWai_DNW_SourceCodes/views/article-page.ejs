@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Read article page</title>
+        <style>
+            button {
+                padding: 10px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            html, body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+            .headerNav {
+                position: fixed;
+                top: 0;          
+                width: 100%;     
+                background-color: black;  
+                color: white;  
+                padding: 10px 0;
+                text-align: center;
+                z-index: 1000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="headerNav">
+            <div style="display: flex; justify-content: space-between;">
+                <h1 style="padding-left: 30px; font-family: Impact;">Read Article Page</h1>
+                <button onclick="window.location.href='http://localhost:3000/users/reader'" style="margin-right: 30px; margin-top: 30px;">Back</button>
+            </div>
+        </div>
+        <div style="margin: 20px; padding-top: 100px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div style="display: block;">
+                        <h1><%= article.article_title %></h1>
+                    </div>
+                    <div style="display: block;">
+                        <form action="/users/like" method="POST">
+                            <input type="hidden" name="id" value="<%= article.article_id %>">
+                            <button type="submit">Like this article</button>
+                        </form>
+                    </div>
+                </div>
+
+                <p><%= article.content %></p>
+
+                <div style="display: flex;justify-content: flex-start;">
+                    <div style="display: block;">
+                        <p>Reads (<%= article.reads %>)</p>
+                    </div>
+                    <div style="display: block; padding-left: 10px;">
+                        <p>Likes (<%= article.likes %>)</p>
+                    </div>
+                </div>
+
+                <h4>Published at: <%= article.published_at %></h4>
+                <hr>
+        </div>
+
+        <div style="background-color: black; padding-bottom: 100px; color: white;">
+            <div style="background-color: black;">
+
+                <h2 style="text-align: center;">Comments</h2>
+
+                <form action="/users/comment" method="POST">
+                    <input type="hidden" name="article_id" value="<%= article.article_id %>">
+                        <div>
+                            <input type="text" id="commenter" name="commenter" value="<%= readerName %>" style="background-color: black; color: white;" readonly>
+                        </div><br>
+                    <div>
+                        <textarea style="width: 500px; height: 30px;" id="comment" name="comment" placeholder="Insert your comment here." minlength="5" maxlength="100" class="large-textarea"></textarea>
+                    </div>
+                    <div style="display: flex; justify-content: flex-end;">
+                        <div style="display: block;">
+                            <button type="submit">Submit comment</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div style="background-color: black; padding-bottom: 100px; color: white;">
+                <% comments.forEach(comment => { %>
+                    <div style="display: flex; justify-content: space-between">
+                        <div style="display: block;">
+                            <h3>Reader: <%= comment.author_name %></h3>
+                        </div>
+                        <div style="display: block;">
+                            <p>Created at: <%= comment.comment_created_at %></p>
+                        </div>
+                    </div>
+                    
+                    <p>Comment: <%= comment.comment_content %></p><br><br>
+                <% }) %>
+        </div>
+    </body>
+</html>

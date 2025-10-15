@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New article page</title>
+        <link rel="stylesheet" href="../main.css">
+        <style>
+            body{
+                display:block;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="headerNav">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="display: block;">
+                    <h1 style="padding-left: 30px; font-family: Impact;">Add Article Page</h1>
+                </div>
+                <div style="display: block;">
+                    <button onclick="window.location.href='http://localhost:3000/users/author'" style="margin-right: 30px; margin-top: 30px;">back</button>
+                </div>    
+            </div>
+        </header>
+        <div style="padding-top: 200px;">
+        <form action="/users/new-article" method="post">
+
+            <input type="text" id="article_title" name="article_title" placeholder="Article title" style="margin-left: 30px;" required><br>
+            <label for="content" style="margin-left: 30px;">Content:</label><br>
+            <textarea style="width: 500px; height: 300px; margin-left: 30px;" id="content" name="content" placeholder="Place your article information here (5 characters min and 100 characters max)" minlength="5" maxlength="100" required></textarea><br>
+            
+            <input type="hidden" id="publishStatus" name="publishStatus" value="draft" required><br>
+
+            <button type="submit" style="margin-left: 30px;">Create</button>
+        </form>
+        </div>
+    </body>
+</html>

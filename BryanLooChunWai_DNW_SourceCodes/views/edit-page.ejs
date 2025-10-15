@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit article</title>
+        <style>
+            button {
+                padding: 10px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .headerNav {
+                position: fixed;
+                top: 0;         
+                width: 100%;      
+                background-color: black;  
+                color: white;     
+                padding: 10px 0; 
+                text-align: center; 
+                z-index: 1000;
+            }
+            body{
+                margin: 0 auto; 
+            }
+        </style>
+    </head>
+    <body>
+        <div class="headerNav">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="display: block;">
+                    <h1 style="padding-left: 30px; font-family: Impact;">Edit Article</h1>
+                </div>
+                <div style="display: block;">
+                    <button onclick="window.location.href='http://localhost:3000/users/author'" style="margin-right: 30px; margin-top: 30px;">back</button>
+                </div>    
+            </div>
+        </div>
+        <main style="padding-top: 200px;">
+            <% if (article) { %>
+                <form action="/users/edit-page/<%= article.article_title %>" method="POST">
+                    <input type="text" id="title" name="article_title" value="<%= article.article_title %>" readonly><br><br>
+
+                    <label for="content">Content:</label><br>
+                    <textarea style="width: 500px; height: 300px;" id="content" name="content" required class="large-textarea"><%= article.content %></textarea>
+
+                    <br>
+                    <button type="submit" class="saveBtn">Save changes</button>
+                </form>
+            <% } else { %>
+                <p>Article not found or not passed correctly.</p>
+            <% } %>
+        </main>
+    </body>
+</html>

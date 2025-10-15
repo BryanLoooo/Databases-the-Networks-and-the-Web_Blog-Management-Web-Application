@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registration Page</title>
+        <link rel="stylesheet" href="/main.css">
+    </head>
+    <body>
+        <div class="page-container">
+            <h1>Registration Page</h1>
+            <div class="registration-container">
+                <form action="/users/register" method="post">
+                    <input type="text" id="name" name="name" placeholder="name" required>
+                    <br>
+
+                    <input type="text" id="email" name="email" placeholder="email" required>
+                    <br>
+
+                    <input type="password" id="password" name="password" placeholder="password" required>
+                    <br>
+
+                    <input type="text" id="age" name="age" placeholder="age" required>
+                    <br>
+
+                    <select id="role" name="role">
+                        <option value="author">Author</option>
+                        <option value="reader">Reader</option>
+                    </select>
+
+                    <br><br><br>
+
+                    <button type="submit">Register</button>
+                    <button onclick="window.location.href='http://localhost:3000/'">Back</button>
+
+                </form>
+            </div>
+            
+            <ul style="text-align: left;">
+            <% if (typeof error!== 'undefined' && error) { %>
+                <% error.forEach(function(err) { %>
+                    <li style="color: red;"><%= err.msg %></li>
+                <% }); %>
+            <% } %>
+            <% if (typeof errorUser !== 'undefined') { %>
+                <p style="color: red;"><%= errorUser %></p>
+            <% } %>
+            </ul>
+        </div>
+    </body>
+</html>

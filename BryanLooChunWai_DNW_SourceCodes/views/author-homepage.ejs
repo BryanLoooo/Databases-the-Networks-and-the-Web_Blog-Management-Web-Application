@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Author Home Page</title>
+        <style>
+            button {
+                padding: 10px 20px;
+                background-color: white;
+                border: 2px solid black;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            td{
+                padding: 10px;
+            }
+            html, body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            table {
+                margin: 0 auto;
+                border-collapse: collapse;
+            }
+            th, td {
+                width: 271px;
+                padding: 8px;
+                text-align: left;
+                border: 1px solid black;
+                max-width: 300px;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            .headerNav {
+                position: fixed;
+                top: 0;           
+                width: 100%;      
+                background-color: black;
+                color: white;    
+                padding: 10px 0;
+                text-align: center;
+                z-index: 1000;
+            }
+        </style>
+    </head>
+<body>
+    <header>
+        <div class="headerNav">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="display: block;">
+                    <h1 style="padding-left: 30px; font-family: Impact;">Author Home Page</h1>
+                </div>
+                <div style="display: block; padding-right: 30px; padding-top: 30px;">
+                    <button onclick="location.href='http://localhost:3000/users/new-article'" style="background-color: black; border: 2px solid white; color: white;">Create New Draft</button>
+                    <button onclick="window.location.href='http://localhost:3000/users/settings'" style="background-color: black; border: 2px solid white; color: white;">Settings</button>
+                    <button onclick="window.location.href='http://localhost:3000/users/author/logout'" style="background-color: black; border: 2px solid white; color: white;">Logout</button>
+                </div>
+            </div>
+        </div>
+        <div style="padding-top: 200px;">
+            <div style="display: flex; justify-content: center;">
+                <div style="display: block;">
+                    <h1 class="user"><%= blogTitle %></h1>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div style="display: block;">
+                    <h3 class="user">Created by: <%= name %></h3>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section>
+            <h3 style="padding-left: 30px; text-align: center;">Draft Articles</h3>
+            <table>
+                <thead>
+                    <tr style="background-color: orange;">
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Last modified</th>
+                        <th>Content</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% draftArticles.forEach(draft => { %>
+                    <tr>
+                        <td><%= draft.article_title %></td>
+                        <td><%= draft.created_at %></td>
+                        <td><%= draft.updated_at %></td>
+                        <td class="content-column"><%= draft.content %></td>
+                        <td>
+                            <button onclick="window.location.href='http://localhost:3000/users/edit-page/<%= encodeURIComponent(draft.article_title) %>'">Edit</button>
+                            <button onclick="publishDraft('<%= encodeURIComponent(draft.article_id) %>')" style="background-color: green; color: white;">Publish</button>
+                            <button onclick="deleteDraft('<%= encodeURIComponent(draft.article_id) %>')" style="background-color: red; color: white;">Delete</button>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <h3 style="padding-left: 30px; padding-top: 20px; text-align: center;">Published Articles</h3>
+            <table>
+                <thead>
+                    <tr style="background-color: orange;">
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Published</th>
+                        <th>Last modified</th>
+                        <th>Reads</th>
+                        <th>Likes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% publishedArticles.forEach(published => { %>
+                    <tr>
+                        <td><%= published.article_title %></td>
+                        <td><%= published.created_at %></td>
+                        <td><%= published.published_at %></td>
+                        <td><%= published.updated_at %></td>
+                        <td><%= published.reads %></td>
+                        <td><%= published.likes %></td>
+                        <td>
+                            <button onclick="window.location.href='http://localhost:3000/users/reader %>'" style="background-color: green; color: white;">Share</button>
+                            <button onclick="deletePublishedArticle('<%= encodeURIComponent(published.article_id) %>')" style="background-color: red; color: white;">Delete</button>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        //this function is called to delete the already published articles
+        function deletePublishedArticle(articleID) {
+
+            fetch(`/users/delete-published-article/${encodeURIComponent(articleID)}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload(); // Reload the page upon successful deletion
+
+                    } else {
+                        console.error('Failed to delete article');
+                    }
+                })
+
+                .catch(error => console.error('Error deleting article:', error));
+        }
+
+        //this function is called to delete the created articles that are still in draft status
+        function deleteDraft(articleID) {
+
+            fetch(`/users/delete-draft/${encodeURIComponent(articleID)}`, { method: 'DELETE' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload(); // Reload the page upon successful deletion
+
+                    } else {
+                        console.error('Failed to delete article');
+                    }
+                })
+                .catch(error => console.error('Error deleting article:', error));
+        }
+
+        //this function is called to updated the draft articles to a published status
+        function publishDraft(articleID) {
+
+            fetch(`/users/publish-draft/${articleID}`, { method: 'POST' })
+               .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+
+                    } else {
+                        console.error('Failed to publish article');
+                    }
+                })
+               .catch(error => console.error('Error publishing article:', error));
+        }
+    </script>
+</body>
+</html>
